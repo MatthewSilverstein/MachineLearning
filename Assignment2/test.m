@@ -7,4 +7,4 @@ theta=initial_theta;
 A=X*theta;
 h=sigmoid(A);
 J=h
-costFunctionReg(initial_theta,X,y,1)
+costFunction(initial_theta,X,y,1)

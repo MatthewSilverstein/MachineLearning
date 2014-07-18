@@ -8,7 +8,6 @@ function [J, grad] = costFunctionReg(theta, X, y, lambda)
 m = length(y); % number of training examples
 
 % You need to return the following variables correctly 
-J = 0;
 grad = zeros(size(theta));
 
 % ====================== YOUR CODE HERE ======================
@@ -19,9 +18,14 @@ grad = zeros(size(theta));
 
 
 
-
-
-
+A=X*theta
+h=sigmoid(A)
+J=h
+%B1=(log(sigmoid(X*theta)))
+%B2=(log(1-sigmoid(X*theta)))
+%A1=-y
+%A2=y-1
+%J=1/m*(A1'*B1+A2'*B2)
 % =============================================================
 
 end

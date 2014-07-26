@@ -62,24 +62,61 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Part 1 FP
+
+A1 = X'; %'
+A1 = [ones(1, m); A1];
+Z2 = Theta1 * A1;
+A2 = sigmoid(Z2);
+A2 = [ones(1, m); A2];
+Z3 = Theta2 * A2;
+A3 = sigmoid(Z3);
+H = A3'; %'
+
+yT = y'; %'
+newY = zeros(1,m);
+for i = 1:num_labels
+	newY = [newY; yT == i];
+endfor
+newY(1,:)=[];
+newY = newY'; %'
+
+LH = log(H);
+LH1 = log(1 - H);
+
+A = newY .* (-LH + LH1) - LH1;
+J = sum(A(:))/m;
+
+%Part 2 Regularized
 
 
+newTheta1 = Theta1;
+newTheta1(:,1) = [];
+newTheta2 = Theta2;
+newTheta2(:,1) = [];
 
+newThetas = [newTheta1(:); newTheta2(:)];
+J = J + lambda / (2 * m) * (newThetas' * newThetas); %'
 
+% Part 3 BP
+delta3 = A3 - newY'; %'
+delta2 = newTheta2' * delta3 .* sigmoidGradient(Z2); %'
+newA1 = A1;
+newA1(1,:)=[];
+newA2 = A2;
+newA2(1,:)=[];
 
+D1 = delta2 * A1'; %'
+D2 = delta3 * A2'; %'
 
+Theta1_grad = 1 / m * D1;
+Theta2_grad = 1 / m * D2;
 
-
-
-
-
-
-
-
-
-
-
-
+% add Regularized parts to Theta1_grad, Theta2_grad
+newTheta1 = [zeros(1, size(newTheta1,1)); newTheta1']'; 
+newTheta2 = [zeros(1, size(newTheta2,1)); newTheta2']';
+Theta1_grad = Theta1_grad + lambda / m * newTheta1;
+Theta2_grad = Theta2_grad + lambda / m * newTheta2;
 % -------------------------------------------------------------
 
 % =========================================================================
